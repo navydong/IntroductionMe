@@ -1,4 +1,4 @@
-(function(){ 
+const timer = function(){ 
 
   var digit=
    [
@@ -256,4 +256,4 @@
    },50);
   }
    
-  })();
+  }

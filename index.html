@@ -1,21 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>Introduction Me</title>
   <style type="text/css">
-    body{margin:0;padding:0;}
-    #canvas{display:block;
-      margin:300px auto 0;
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
     }
-  
-  
+
+    #canvas {
+      display: block;
+      width: 300px;
+    }
+
+    .app {
+      height: 100vh;
+      position: relative;
+      transition: all 1s ease;
+    }
+
+    .app div {
+      height: 100vh;
+      width: 100%;
+    }
+    .app div:nth-child(1) {
+      background-color: skyblue;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app div:nth-child(2) {
+      background-color: aqua;
+    }
+
+    .app div:nth-child(3) {
+      background-color: salmon;
+    }
   </style>
+  <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <!-- 生产环境中不建议使用 -->
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 </head>
+
 <body>
-  <canvas id="canvas" width="800" height="100"></canvas>
+  <div id="example"></div>
+  <!-- <canvas id="canvas" width="800" height="100"></canvas> -->
   <script src="./js/timer.js"></script>
+  <script type="text/babel">
+    class App extends React.Component {
+      constructor(props){
+        super(props)
+        this.state = {
+          currentIndex: 1,
+          isScroll: false
+        }
+      }
+      componentDidMount(){
+        document.addEventListener('mousewheel', this.scroll)
+        timer()
+      }
+      scroll = (e)=>{
+        if(!this.state.isScroll){
+          this.setState({isScroll:true})
+            if(e.wheelDelta>0){
+              this.setState({
+                currentIndex: this.state.currentIndex > 1 ? this.state.currentIndex-1 : 3
+              })
+            }else{
+              this.setState({
+                currentIndex: this.state.currentIndex < 3 ? this.state.currentIndex+1 : 1
+              })
+            }
+            setTimeout(() => {
+              this.setState({
+                isScroll: false
+              })
+            }, 1000);
+        }
+      }
+      render(){
+        return (
+          <div className="app" style={{transform: `translateY(-${this.state.currentIndex-1}00%)`}}>
+            <div>
+                <canvas id="canvas" width="800" height="100"></canvas>
+            </div>
+            <div>2</div>
+            <div>3</div>
+          </div>
+        )
+      }
+    }
+    ReactDOM.render(
+      <App />,
+      document.getElementById('example')
+    );
+  </script>
 </body>
+
 </html>
